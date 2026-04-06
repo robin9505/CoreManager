@@ -40,29 +40,18 @@ if (isset($_GET['edit'])) {
 }
 
 $toppings = $repo->getAll();
+$pageTitle = "Toppings";
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>CoreManager - Toppings</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <style>
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
-        th { background: #f8fafc; }
-        .btn-edit { color: var(--primary); text-decoration: none; margin-right: 10px; }
-        .btn-delete { color: var(--error); text-decoration: none; }
-        .form-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #ddd; }
-    </style>
+    <?php include 'includes/head.php'; ?>
+    <link rel="stylesheet" href="assets/css/layout.css">
 </head>
 <body>
 
-<header>
-    <div class="logo">CoreManager</div>
-    <nav><a href="index.php" style="color:white; text-decoration:none;">⬅️ Volver</a></nav>
-</header>
+<?php include 'includes/header.php'; ?>
 
 <main class="dashboard-content">
     <h1>Gestión de Toppings</h1>
@@ -117,6 +106,6 @@ $toppings = $repo->getAll();
         </tbody>
     </table>
 </main>
-
+<?php include 'includes/footer.php'; ?>
 </body>
 </html>

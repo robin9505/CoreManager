@@ -1,0 +1,225 @@
+
+
+/* El header suele medir entre 60px y 70px, asegúrate de que no se encoja */
+header {
+    flex-shrink: 0;
+}
+
+body.pos-screen {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh; /* Para móviles */
+    margin: 0;
+    overflow: hidden;
+}
+
+.pos-wrapper {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    padding: 10px;
+    box-sizing: border-box; /* Fundamental para que el padding no sume al 100% */
+}
+
+.pos-container {
+    display: grid;
+    /* En pantallas grandes: catálogo flexible, ticket fijo de 380px */
+    grid-template-columns: 1fr 380px; 
+    gap: 15px;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+/* Manejo del Catálogo */
+.catalog-area {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+.catalog {
+    flex: 1;
+    overflow-y: auto; /* Scroll solo en los productos */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    padding-right: 10px;
+    align-content: start;
+}
+
+.ticket {
+    background: #fff;
+    border: 2px solid #000;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Se mantiene al 100% del padre */
+    min-height: 0;
+    padding: 15px;
+    box-shadow: 4px 4px 0px #000;
+    box-sizing: border-box;
+}
+
+/* El título y el footer del ticket NO se deben encoger */
+.ticket-title, .ticket-footer {
+    flex-shrink: 0;
+}
+
+/* La lista de items es la que absorbe el scroll */
+.ticket-list {
+    flex: 1;
+    overflow-y: auto;
+    margin: 10px 0;
+    padding-right: 5px;
+    min-height: 50px; /* Evita que desaparezca si hay muchos productos */
+}
+
+/* Estilos de Botones y Tarjetas */
+.product-card {
+    background: white;
+    border: 2px solid #e2e8f0;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.product-card:hover {
+    border-color: #000;
+    transform: translateY(-2px);
+}
+
+.total-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#btn-cobrar {
+    width: 100%;
+    background: #000;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+/* --- ARREGLO DE MODALES --- */
+
+.modal {
+    display: none; /* Se activa con JS (flex) */
+    position: fixed; /* Fijo respecto a la ventana, no al contenedor */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7); /* Fondo oscuro */
+    align-items: center;
+    justify-content: center;
+    z-index: 9999; /* Por encima del header, ticket y catálogo */
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    width: 450px;
+    max-width: 90%;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    /* Animación simple para que no aparezca de golpe */
+    animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Estilos internos de los modales (reutilizando tu lógica) */
+.opt-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border: 1px solid #f1f5f9;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    align-items: center;
+}
+
+.opt-row:hover {
+    background: #f8fafc;
+    border-color: #000;
+}
+
+.qty-container {
+    margin-top: 15px;
+    padding: 10px;
+    background: #f8fafc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #e2e8f0;
+}
+
+.qty-input {
+    width: 60px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 2px solid #000;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Para ocultar elementos */
+.hidden { display: none !important; }
+
+/* --- AJUSTE PARA CELULARES (Target: Pantallas económicas/pequeñas) --- */
+@media (max-width: 900px) {
+    .pos-container {
+        /* Cambiamos a una sola columna para que nada se amontone */
+        grid-template-columns: 1fr; 
+        grid-template-rows: 1fr 1fr; /* Mitad catálogo, mitad ticket */
+        overflow-y: auto; /* Permitimos scroll si el celular es muy pequeño */
+    }
+
+    .pos-wrapper {
+        padding: 5px; /* Ganamos espacio en las orillas */
+    }
+
+    .ticket {
+        width: 100%; /* El ticket usa todo el ancho disponible */
+        max-width: 100%;
+        margin: 0;
+        box-shadow: 2px 2px 0px #000; /* Sombra más discreta en móvil */
+        padding: 10px;
+    }
+}
+
+/* Si prefieres mantenerlos de lado incluso en móvil (solo si la pantalla lo permite) */
+@media (max-width: 600px) {
+    .pos-container {
+        /* Si quieres que se vean juntos, bajamos el ticket a 150px o similar, 
+           pero lo ideal en móvil es que el ticket esté abajo del catálogo */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .catalog-area {
+        height: 50%; /* Catálogo arriba */
+    }
+    
+    .ticket {
+        height: 50%; /* Ticket abajo */
+    }
+}

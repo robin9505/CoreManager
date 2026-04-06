@@ -14,29 +14,43 @@ $fecha_inicio = $_GET['desde'] ?? date('Y-m-d');
 $fecha_fin = $_GET['hasta'] ?? date('Y-m-d');
 
 $ventas = $ventRepo->getVentasPorRango($fecha_inicio, $fecha_fin);
+$pageTitle = "Reporte Ventas";
+$loadDataTables = true;
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>CoreManager - Reporte de Ventas</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+     <?php include 'includes/head.php'; ?>
     
     <style>
         .report-container { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-top: 20px; }
         .filter-bar { background: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; align-items: flex-end; border: 1px solid #e2e8f0; }
         .detalle-row { background: #f1f5f9 !important; font-size: 0.9rem; }
         .badge-extra { background: #dcfce7; color: #166534; padding: 2px 5px; border-radius: 4px; font-size: 0.7rem; }
+        .report-container { 
+        background: white; 
+        padding: 20px; 
+        border-radius: 12px; 
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+        margin-top: 20px; 
+        /* --- ESTA ES LA CORRECCIÓN --- */
+        margin-bottom: 80px; /* Suficiente espacio para que el footer no tape la paginación */
+    }
+    
+    .filter-bar { background: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; align-items: flex-end; border: 1px solid #e2e8f0; }
+    .detalle-row { background: #f1f5f9 !important; font-size: 0.9rem; }
+    .badge-extra { background: #dcfce7; color: #166534; padding: 2px 5px; border-radius: 4px; font-size: 0.7rem; }
+
+    /* Ajuste para que la paginación de DataTables sea visible en móvil */
+    .dataTables_wrapper .dataTables_paginate {
+        margin-top: 15px;
+        margin-bottom: 10px;
+    }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">CoreManager - Reportes</div>
-        <nav><a href="index.php" style="color:white;">⬅️ Volver al Panel</a></nav>
-    </header>
+    <?php include 'includes/header.php'; ?>
 
     <main class="dashboard-content">
         <h1>Reporte de Ventas</h1>
@@ -50,11 +64,11 @@ $ventas = $ventRepo->getVentasPorRango($fecha_inicio, $fecha_fin);
                 <label>Hasta:</label><br>
                 <input type="date" name="hasta" value="<?php echo $fecha_fin; ?>" style="padding:8px; border-radius:5px; border:1px solid #ccc;">
             </div>
-            <button type="submit" style="background:var(--dark); color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">Filtrar Rango</button>
+            <button type="submit" style="background:var(--dark); color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">Buscar</button>
         </form>
 
-        <div class="report-container">
-            <table id="tablaVentas" class="display responsive nowrap" style="width:100%">
+        <div class="table-container">
+            <table id="tablaVentas" class="display" style="width:100%">
                 <thead>
                     <tr>
                         <th>Folio</th>
@@ -97,22 +111,21 @@ $ventas = $ventRepo->getVentasPorRango($fecha_inicio, $fecha_fin);
         </div>
     </main>
 
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+   <?php include 'includes/footer.php'; ?>
 
     <script>
-        $(document).ready(function() {
-            $('#tablaVentas').DataTable({
-                responsive: true,
-                order: [[1, 'desc']], // Ordenar por fecha (columna 1) de forma descendente
-                language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' // Traducción a español
-                },
-                pageLength: 10,
-                dom: 'Bfrtip', // Para botones si quisieras exportar luego
-            });
+    $(document).ready(function() {
+        $('#tablaVentas').DataTable({
+            responsive: false, // DESACTIVADO: Queremos scroll horizontal manual
+            scrollX: true,     // ACTIVADO: Habilita el scroll dentro de DataTables
+            order: [[1, 'desc']],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+            },
+            pageLength: 10,
+            dom: 'Bfrtip',
         });
-    </script>
+    });
+</script>
 </body>
 </html>

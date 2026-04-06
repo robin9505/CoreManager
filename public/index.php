@@ -8,27 +8,19 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Datos del usuario para mostrar en el Dashboard
-$username = $_SESSION['username'];
+
 $rol = $_SESSION['rol'];
+$pageTitle = "Dashboard";
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoreManager - Dashboard</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <?php include 'includes/head.php'; ?>
 </head>
 <body>
 
-    <header>
-        <div class="logo">CoreManager</div>
-        <nav>
-            <span>Bienvenido, <strong><?php echo htmlspecialchars($username); ?></strong> (<?php echo $rol; ?>)</span>
-            <a href="logout.php" class="btn-logout">Cerrar Sesión</a>
-        </nav>
-    </header>
+    <?php include 'includes/header.php'; ?>
 
     <main class="dashboard-content">
         <h1>Panel de Control</h1>
@@ -71,6 +63,6 @@ $rol = $_SESSION['rol'];
         </div>
         
     </main>
-
+<?php include 'includes/footer.php'; ?>
 </body>
 </html>

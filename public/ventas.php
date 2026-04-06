@@ -37,58 +37,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['venta_data'])) {
         exit(); 
     }
 }
+$pageTitle = "Punto de Venta";
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>CoreManager - Punto de Venta</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <style>
-        .pos-container { display: grid; grid-template-columns: 1fr 380px; gap: 20px; height: 80vh; margin-top: 20px; }
-        .search-box { margin-bottom: 15px; }
-        .search-box input { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #e2e8f0; outline: none; box-sizing: border-box; }
-        
-        .catalog { overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; padding-right: 5px; }
-        .product-card { background: white; border: 2px solid #e2e8f0; padding: 20px; border-radius: 15px; cursor: pointer; text-align: center; transition: 0.2s; display: flex; flex-direction: column; justify-content: center; }
-        .product-card:hover { border-color: var(--dark); transform: scale(1.02); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .product-card.hidden { display: none; }
-        .product-card h3 { margin: 5px 0; color: var(--dark); }
-        .product-card p { font-size: 0.85rem; color: #64748b; margin: 5px 0; min-height: 32px; }
-
-        .ticket { background: #fff; border: 2px solid var(--dark); border-radius: 12px; display: flex; flex-direction: column; padding: 20px; box-shadow: 4px 4px 0px var(--dark); }
-        .ticket-list { flex: 1; overflow-y: auto; font-family: 'Courier New', Courier, monospace; border-bottom: 1px dashed #cbd5e1; margin-bottom: 10px; }
-        .t-item { padding: 8px 0; border-bottom: 1px solid #f1f5f9; cursor: pointer; }
-        .t-item:hover { background: #fff1f1; color: var(--error); }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 1000; }
-        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 450px; max-width: 90%; position: relative; }
-        .opt-row { display: flex; justify-content: space-between; padding: 12px; border: 1px solid #f1f5f9; margin-bottom: 8px; border-radius: 8px; cursor: pointer; transition: 0.2s; align-items: center; }
-        .opt-row:hover { background: #f8fafc; border-color: var(--dark); }
-        
-        /* Estilo para el input de cantidad */
-        .qty-container { margin-top: 15px; padding: 10px; background: #f8fafc; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #e2e8f0; }
-        .qty-input { width: 60px; padding: 8px; border-radius: 5px; border: 2px solid var(--dark); text-align: center; font-weight: bold; }
-        
-        .hidden { display: none; }
-    </style>
+    <?php include 'includes/head.php'; ?>
+    <link rel="stylesheet" href="assets/css/pos.css">
 </head>
-<body>
+<body class="pos-screen">
 
-    <header>
-        <div class="logo">CoreManager</div>
-        <nav>
-            <a href="index.php" style="color:white; text-decoration:none; margin-right: 20px;">⬅️ Volver</a>
-            <span>Usuario: <strong><?php echo htmlspecialchars($username); ?></strong></span>
-        </nav>
-    </header>
+    <?php include 'includes/header.php'; ?>
 
-    <main class="dashboard-content" style="max-width: 1400px;">
+    <main class="pos-wrapper">
         <div class="pos-container">
-            <div>
+            
+            <div class="catalog-area">
                 <div class="search-box">
-                    <input type="text" id="search-prod" placeholder="🔍 Buscar producto por nombre..." onkeyup="filterProducts()">
+                    <input type="text" id="search-prod" placeholder="🔍 Buscar producto..." onkeyup="filterProducts()">
                 </div>
                 
                 <div class="catalog" id="main-catalog">
@@ -101,33 +68,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['venta_data'])) {
                         <div style="font-size: 2rem;">🍦</div>
                         <h3><?php echo htmlspecialchars($nombre); ?></h3>
                         <p><?php echo htmlspecialchars($descripcion); ?></p>
-                        <small style="font-weight: bold; color: var(--dark); background: #f1f5f9; padding: 4px 8px; border-radius: 5px;">
-                            <?php echo count($variantes); ?> Tamaños
-                        </small>
+                        <small class="tag-tamano"><?php echo count($variantes); ?> Tamaños</small>
                     </div>
                     <?php endforeach; ?>
                 </div>
             </div>
 
             <div class="ticket">
-                <h3 style="text-align:center; border-bottom: 2px solid #000; padding-bottom:10px;">RESUMEN DE VENTA</h3>
+                <h3 class="ticket-title">RESUMEN DE VENTA</h3>
                 <div id="ticket-items" class="ticket-list">
-                    <p style="text-align:center; color:#94a3b8; margin-top:20px;">El ticket está vacío</p>
+                    <p class="empty-msg">El ticket está vacío</p>
                 </div>
-                <div style="padding-top:15px;">
-                    <div style="display:flex; justify-content:space-between; align-items: center; margin-bottom:10px;">
-                        <span style="font-weight:bold;">TOTAL:</span>
-                        <h2 id="total-text" style="margin:0;">$0.00</h2>
+                
+                <div class="ticket-footer">
+                    <div class="total-container">
+                        <span>TOTAL:</span>
+                        <h2 id="total-text">$0.00</h2>
                     </div>
                     <form method="POST" id="form-venta" onsubmit="return prepararEnvio()">
                         <input type="hidden" name="venta_data" id="venta_data">
-                        <button type="submit" id="btn-cobrar" style="width:100%; background:var(--dark); color:white; padding:15px; border-radius:8px; border:none; cursor:pointer; font-weight:bold; font-size:1.1rem;">REGISTRAR VENTA</button>
+                        <button type="submit" id="btn-cobrar">REGISTRAR VENTA</button>
                     </form>
                 </div>
             </div>
+
         </div>
     </main>
-
+<?php include 'includes/footer.php'; ?>
     <div id="modal-tamanos" class="modal">
         <div class="modal-content">
             <h2 id="t-prod-name">Elegir Tamaño</h2>

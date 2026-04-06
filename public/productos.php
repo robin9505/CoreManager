@@ -50,6 +50,7 @@ if (isset($_GET['res'])) {
 
 $tamanosDisponibles = $tamRepo->getAll();
 $catalogo = $prodRepo->getAllVariants();
+$pageTitle = "Productos";
 
 // Función helper para la UI
 function findVariant($id_tamano, $producto_edit) {
@@ -64,9 +65,7 @@ function findVariant($id_tamano, $producto_edit) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>CoreManager - Catálogo</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+     <?php include 'includes/head.php'; ?>
     <style>
         .grid-tamanos { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 15px 0; }
         .card-tamano { background: #fff; border: 2px solid #e2e8f0; padding: 1rem; border-radius: 8px; transition: 0.3s; }
@@ -80,10 +79,7 @@ function findVariant($id_tamano, $producto_edit) {
 </head>
 <body>
 
-    <header>
-        <div class="logo">CoreManager</div>
-        <nav><a href="index.php" style="color:white; text-decoration:none;">⬅️ Volver</a></nav>
-    </header>
+      <?php include 'includes/header.php'; ?>
 
     <main class="dashboard-content">
         <h1>Gestión de Productos</h1>
@@ -158,7 +154,7 @@ function findVariant($id_tamano, $producto_edit) {
             </tbody>
         </table>
     </main>
-
+<?php include 'includes/footer.php'; ?>
     <script>
         function toggleSize(checkbox, id) {
             const precio = document.getElementById('p-' + id);

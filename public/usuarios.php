@@ -18,7 +18,7 @@ $userRepo = new UserRepository($db);
 
 $mensaje = "";
 $tipo_alerta = ""; // Para diferenciar éxito de error
-
+$pageTitle = "Usuarios";
 // Procesar el formulario cuando se envía
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nuevo_user = $_POST['username'] ?? '';
@@ -46,10 +46,7 @@ $roles = $userRepo->getAllRoles();
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoreManager - Usuarios</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <?php include 'includes/head.php'; ?>
     <style>
         /* Estilos rápidos específicos para formularios internos */
         .form-card {
@@ -71,12 +68,7 @@ $roles = $userRepo->getAllRoles();
 </head>
 <body>
 
-    <header>
-        <div class="logo">CoreManager</div>
-        <nav>
-            <a href="index.php" style="color: white; text-decoration: none; font-size: 0.9rem;">⬅️ Volver al Panel</a>
-        </nav>
-    </header>
+    <?php include 'includes/header.php'; ?>
 
     <main class="dashboard-content">
         <h1>Gestión de Usuarios</h1>
@@ -120,6 +112,6 @@ $roles = $userRepo->getAllRoles();
             </form>
         </section>
     </main>
-
+<?php include 'includes/footer.php'; ?>
 </body>
 </html>

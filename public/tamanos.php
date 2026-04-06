@@ -49,29 +49,18 @@ if (isset($_GET['edit'])) {
 }
 
 $tamanos = $repo->getAll();
+$pageTitle = "Tamaños";
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>CoreManager - Tamaños</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <style>
-        .crud-container { display: flex; gap: 2rem; align-items: flex-start; }
-        .form-side { flex: 1; background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; position: sticky; top: 20px; }
-        .table-side { flex: 2; background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
-        .badge-id { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
-    </style>
+       <?php include 'includes/head.php'; ?>
+    <link rel="stylesheet" href="assets/css/layout.css">
 </head>
 <body>
 
-    <header>
-        <div class="logo">CoreManager</div>
-        <nav><a href="index.php" style="color:white; text-decoration:none;">⬅️ Volver al Panel</a></nav>
-    </header>
+      <?php include 'includes/header.php'; ?>
 
     <main class="dashboard-content">
         <h1>Configuración de Tamaños</h1>
@@ -131,5 +120,6 @@ $tamanos = $repo->getAll();
             </section>
         </div>
     </main>
+    <?php include 'includes/footer.php'; ?>
 </body>
 </html>
